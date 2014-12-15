@@ -1,0 +1,21 @@
+.sapMPageScroll {
+    margin: 0;
+    padding: 0;
+    text-align: center; /* !!! */
+}
+
+.sapMPageScroll img{
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+
+.mySquare {                  /* style the CSS class that has been written by the renderer method */
+			display: inline-block;   /* enable squares to appear next to each other within one line */
+			border: 1px solid red;   /* add some border, so the square can actually be seen */
+			background-color: #ddd;
+			padding: 8px;
+			text-align: center;
+			-moz-box-sizing: border-box; /* consider padding+border part of the width/height */
+			box-sizing: border-box;
+		}
