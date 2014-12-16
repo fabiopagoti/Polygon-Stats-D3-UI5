@@ -1,13 +1,14 @@
 [
+
 	{
-		"name": "Charmander",
-		"kind": "Fire",
-		"image": "images/3.png",
+		"name": "Bulbasaur",
+		"kind": "Plant",
+		"image": "images/1.png",
 		"stats":{
-			"attack":"5",
+			"attack":"2",
 			"defense":"3",
 			"speed": "2",
-			"special":"4"
+			"special":"5"
 		}
 	},
 
@@ -24,16 +25,17 @@
 	},
 
 	{
-		"name": "Bulbasaur",
-		"kind": "Plant",
-		"image": "images/1.png",
+		"name": "Charmander",
+		"kind": "Fire",
+		"image": "images/3.png",
 		"stats":{
-			"attack":"2",
+			"attack":"5",
 			"defense":"3",
 			"speed": "2",
-			"special":"5"
+			"special":"4"
 		}
 	},
+
 	
 	{
 		"name": "Pikachu",

@@ -18,8 +18,8 @@ sap.ui.jsview("view.main", {
 			title: "D3 Stats",
 			content: 
 				[	
-					new sap.m.Image({
-						src: "{/0/image}",
+					new sap.m.Image("img_pokemon", {
+						src: oController.getSrcImage(),
 						width: "200px",
 						height: "200px",
 					}),
@@ -27,6 +27,7 @@ sap.ui.jsview("view.main", {
 					new sap.ui.commons.layout.VerticalLayout("lay_stats", {
 						content: [
 							
+
 							new sap.ui.commons.layout.HorizontalLayout({
 							content: [
 									new sap.m.Label({
@@ -35,7 +36,7 @@ sap.ui.jsview("view.main", {
 								}),
 
 								new sap.m.Text("txt_name", {
-									text: "{/0/name}",
+									text: oController.getTextName(),
 								}),
 
 							]
@@ -47,21 +48,50 @@ sap.ui.jsview("view.main", {
 									text: "Kind"
 								}),
 
-								new sap.m.Text({
-									text: "{/0/kind}",
+								new sap.m.Text("txt_kind", {
+									text: oController.getTextKind(),
 								}),
 
 							]
 							}),
 
+							new sap.m.ComboBox("com_pokemon", {
+								selectedItemId: "item_default",
+								items: [
+									new sap.ui.core.ListItem("item_default", {
+										text: "Bulbasaur",
+										key: "1"
+									}),
+
+									new sap.ui.core.ListItem({
+										text: "Squirtle",
+										key: "2"
+									}),
+
+									new sap.ui.core.ListItem({
+										text: "Charmander",
+										key: "3"
+									}),
+
+									new sap.ui.core.ListItem({
+										text: "Pikachu",
+										key: "4"
+									}),
+								],
+
+								change: jQuery.proxy(oController.onChangeComboBox, oController),
+
+
+							}),
+
+							new sap.ui.commons.layout.HorizontalLayout("graph"),
 
 						],
 					}),
 
-					new my.Square({text:"Hello", size: "100px"}),
+					// new my.Square({text:"Hello", size: "100px"}),
 					
-					new polygonStats({text:"Hello", size: "100px"}),
-
+					// new polygonStats({text:"Hello", size: "100px"}),
 					
 				]
 		});
