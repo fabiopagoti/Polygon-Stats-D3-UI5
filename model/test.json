@@ -1,3 +1,26 @@
-{
-	"name":"Fabio"
-}
+[
+	{
+		"attack":"2",
+		"defense":"3",
+		"speed": "2",
+		"special":"5"
+	},
+	{
+		"attack":"2",
+		"defense":"5",
+		"speed": "1",
+		"special":"4"
+	},
+	{
+		"attack":"5",
+		"defense":"3",
+		"speed": "2",
+		"special":"4"
+	},
+	{
+		"attack":"3",
+		"defense":"2",
+		"speed": "5",
+		"special":"5"
+	}
+]

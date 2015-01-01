@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/>
+        <title>Polygon</title>
+        
+        <link rel="stylesheet" type="text/css" href="css/test.css">
+
+        <script type="text/javascript" src="../openui5-sdk/resources/sap/ui/thirdparty/d3.js"></script>
+        <script type="text/javascript" src="underscore-min.js"></script>
+        
+	</head>
+	<body>
+		
+		<div id="content">
+			
+		</div>  
+
+		<script type="text/javascript">
+
+		// UTIL
+
+		function getMaxNumberOfProperties(data){
+
+			var object_with_more_properties = _.max(data, 
+				function(obj){
+					return _.size(obj);
+				});
+
+			return _.size(object_with_more_properties);
+		}
+
+		function calculateAxisRotation(attribute_number,total_of_attributes){
+			return 360 / total_of_attributes * attribute_number;
+		}
+
+		function getCorrectAxisOrient(attribute_number,total_of_attributes){
+			var end_degree = 360 / total_of_attributes * attribute_number;
+
+			var quadrant = Math.floor((end_degree - 1) / 90); 
+
+			switch(quadrant){
+				case 0:
+					return "left";
+
+				case 1:
+					return "bottom";
+
+				case 2:
+					return "right";
+
+				case 3:
+				case 4:
+					return "top";
+
+			}
+
+			attribute_number,total_of_attributes
+		}
+
+		</script>
+
+		<script type="text/javascript">
+
+		// size with margins
+		var width_full = 800;
+		var height_full = 800;
+		
+		var margin = { top: 50, right: 30, bottom: 20, left: 30};
+
+		// useful space (size with no margins)
+		var width = width_full - margin.left - margin.right;
+		var height = height_full - margin.top - margin.bottom;
+
+		// SVG Element with G translating the left + top margins
+		var svg = d3.select("#content")
+					.append("svg")
+					    .attr("width", width_full)
+					    .attr("height", height_full)
+				  	.append("g")
+				    	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+		// scales that consider margins
+		var x = d3.scale.linear()
+		    .range([0, width]);
+
+		var y = d3.scale.linear()
+		    .range([height, 0]);
+
+
+		var number_of_attributes = 4; // default
+
+		d3.json("model/test.json",function(data){
+
+			number_of_attributes = getMaxNumberOfProperties(data);
+			console.log("Number of attributes: " + number_of_attributes);
+
+			// 360 / 4 
+			// 90
+			// create an axis for each available property
+			var attribute_number = 1;
+			for(k in data[0]){
+
+
+			var scale = d3.scale.linear()
+						.range([
+								0,
+								(d3.min([height,width]) / 2)
+								]);
+
+			var axis = d3.svg.axis()
+				.orient(getCorrectAxisOrient(attribute_number,number_of_attributes))
+				.scale(scale)
+				.ticks(3);
+
+
+				svg.append("g")
+					.classed("property",true)
+					.classed(k,true)
+					.attr("transform", 
+						"translate(" + (width / 2) + "," + (height / 2) + ")"
+						 // +
+						// "rotate(" + calculateAxisRotation(attribute_number,number_of_attributes) + ")"
+						)
+					// .attr("transform", "rotate(45)")
+					.call(axis)
+					;
+			
+			attribute_number++;
+
+			};
+
+
+			// rotate axis equally to make a 'polygon'
+
+			// draw lines or shapes
+
+
+
+
+
+		});
+
+		
+		</script>
+	</body>
+</html>
