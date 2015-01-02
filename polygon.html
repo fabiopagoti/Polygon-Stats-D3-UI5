@@ -33,32 +33,22 @@
 		}
 
 		function calculateAxisRotation(attribute_number,total_of_attributes){
+			// return -45;
 			return 360 / total_of_attributes * attribute_number;
 		}
 
-		function getCorrectAxisOrient(attribute_number,total_of_attributes){
-			var end_degree = 360 / total_of_attributes * attribute_number;
-
-			var quadrant = Math.floor((end_degree - 1) / 90); 
-
-			switch(quadrant){
-				case 0:
-					return "left";
-
-				case 1:
-					return "bottom";
-
-				case 2:
-					return "right";
-
-				case 3:
-				case 4:
-					return "top";
-
-			}
-
-			attribute_number,total_of_attributes
+		function getCentralPoint(width,height){
+			return [(width/2),(height/2)];
 		}
+
+		function resetRotation(rotation){
+			return 360 - rotation;
+		}
+
+		function calculatePolygonPoints(scales){
+
+		}
+
 
 		</script>
 
@@ -92,7 +82,11 @@
 
 		var number_of_attributes = 4; // default
 
+		var _data;
+
 		d3.json("model/test.json",function(data){
+			// console.log("data loaded.\n" + data);
+			_data = data;
 
 			number_of_attributes = getMaxNumberOfProperties(data);
 			console.log("Number of attributes: " + number_of_attributes);
@@ -101,43 +95,88 @@
 			// 90
 			// create an axis for each available property
 			var attribute_number = 1;
+
+			var scales = [];
+			var scale_new = {};
 			for(k in data[0]){
 
+			scale_new.p = k;
+			scale_new.s = d3.scale.linear()
 
-			var scale = d3.scale.linear()
+						.domain([
+							d3.min(data, function(d){ 
+								return d[k];
+							}),
+
+							d3.max(data, function(d){
+								return d[k];
+							})
+							])
 						.range([
 								0,
 								(d3.min([height,width]) / 2)
-								]);
+							]);
+
+			scales.push(scale_new);
 
 			var axis = d3.svg.axis()
-				.orient(getCorrectAxisOrient(attribute_number,number_of_attributes))
-				.scale(scale)
+				.orient("left")
+				.scale(scale_new.s)
 				.ticks(3);
 
+			var central_point = getCentralPoint(width,height);
 
-				svg.append("g")
+			// rotate axis equally to make a 'polygon'
+			var property_group = svg.append("g")
 					.classed("property",true)
-					.classed(k,true)
+					.classed(k,true);
+
+			var rotation = calculateAxisRotation(attribute_number,number_of_attributes);
+
+			var axis_group = property_group
+								// .append("g")
+								.classed("axis", true)
+								.attr("transform", 
+									"translate(" + central_point[0] + "," + central_point[1] + ")"
+									 +
+									"rotate(" + rotation + 
+										")"
+									)
+								.call(axis);
+
+			// var transform_from_last_label = property_group.select("g:last-of-type");
+
+			// console.log(transform_from_last_label);
+
+				axis_group
+					.append("text")
 					.attr("transform", 
-						"translate(" + (width / 2) + "," + (height / 2) + ")"
-						 // +
-						// "rotate(" + calculateAxisRotation(attribute_number,number_of_attributes) + ")"
-						)
-					// .attr("transform", "rotate(45)")
-					.call(axis)
+									"translate(" + 0 + "," + central_point[1] + ")"
+									 +
+									"rotate(" + resetRotation(rotation) + 
+										")"
+									)
+						.text(k)
 					;
 			
 			attribute_number++;
 
 			};
 
+			console.log(scales);
 
-			// rotate axis equally to make a 'polygon'
+			svg.selectAll("polygon")
+				.data(_data)
+				.enter()
+					.append("polygon")
+					.attr("points",
+						calculatePolygonPoints()
+						// "200,10 250,190 160,210"
+						)
+					;
+
 
 			// draw lines or shapes
-
-
 
 
 
